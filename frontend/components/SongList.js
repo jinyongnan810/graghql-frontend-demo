@@ -1,17 +1,9 @@
 import React from "react";
 import { gql, useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
-
-const songsQuery = gql`
-  {
-    songs {
-      id
-      title
-    }
-  }
-`;
+import { fetchSongs } from "../queries/fetch-songs";
 const SongList = () => {
-  const { loading, error, data } = useQuery(songsQuery);
+  const { loading, error, data } = useQuery(fetchSongs);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :</p>;

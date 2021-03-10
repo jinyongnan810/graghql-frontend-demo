@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { useHistory } from "react-router";
+import { fetchSongs } from "../queries/fetch-songs";
 
 const createSongMutation = gql`
   mutation addSong($title: String!) {
@@ -17,9 +18,12 @@ const SongCreate = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (songName.trim()) {
-      await addSong({ variables: { title: songName.trim() } });
+      await addSong({
+        variables: { title: songName.trim() },
+        refetchQueries: [{ query: fetchSongs }],
+      });
       history.push("/");
-      history.go(0);
+      // history.go(0);
     }
   };
   return (
