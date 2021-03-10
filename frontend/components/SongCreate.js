@@ -1,21 +1,25 @@
 import React, { useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
+import { useHistory } from "react-router";
+
+const createSongMutation = gql`
+  mutation addSong($title: String!) {
+    addSong(title: $title) {
+      id
+    }
+  }
+`;
 
 const SongCreate = () => {
+  const history = useHistory();
   const [songName, setSongName] = useState("");
-  const onSubmit = (e) => {
+  const [addSong, { data }] = useMutation(createSongMutation);
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (songName.trim()) {
-      const createSongMutation = gql`
-        {
-          mutation addSong{
-              addSong(title:"${songName.trim()}"){
-                id
-                }
-          }
-        }
-      `;
-      const { loading, error, data } = useQuery(createSongMutation);
+      await addSong({ variables: { title: songName.trim() } });
+      history.push("/");
+      history.go(0);
     }
   };
   return (
