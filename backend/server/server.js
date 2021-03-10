@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
 const models = require("./models");
@@ -24,6 +25,7 @@ mongoose.connection
   .once("open", () => console.log("Connected to MongoLab instance."))
   .on("error", (error) => console.log("Error connecting to MongoLab:", error));
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(
   "/graphql",
@@ -32,10 +34,5 @@ app.use(
     graphiql: true,
   })
 );
-
-const webpackMiddleware = require("webpack-dev-middleware");
-const webpack = require("webpack");
-const webpackConfig = require("../webpack.config.js");
-app.use(webpackMiddleware(webpack(webpackConfig)));
 
 module.exports = app;

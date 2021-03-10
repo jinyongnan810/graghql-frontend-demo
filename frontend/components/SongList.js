@@ -16,13 +16,13 @@ const SongList = () => {
   if (error) return <p>Error :</p>;
 
   return (
-    <div>
-      <ul>
-        {data.songs.map((song) => (
-          <li key={song.id}>{song.title}</li>
-        ))}
-      </ul>
-    </div>
+    <ul className="collection">
+      {data.songs.map((song) => (
+        <li key={song.id} className="collection-item">
+          {song.title}
+        </li>
+      ))}
+    </ul>
   );
 };
 
