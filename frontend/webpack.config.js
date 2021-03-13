@@ -5,7 +5,7 @@ module.exports = {
   mode: "development",
   entry: "./index.js",
   output: {
-    path: "/",
+    publicPath: "http://localhost:3000/",
     filename: "bundle.js",
   },
   module: {

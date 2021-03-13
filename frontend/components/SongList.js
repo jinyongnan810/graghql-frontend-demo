@@ -14,7 +14,8 @@ const SongList = () => {
   const [deleteSong, { deleteSongData }] = useMutation(deleteSongMutation);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :</p>;
-  const onDelete = async (id, title) => {
+  const onDelete = async (e, id, title) => {
+    e.preventDefault();
     if (confirm(`Delete song ${title}?`)) {
       await deleteSong({
         variables: { id },
@@ -27,16 +28,17 @@ const SongList = () => {
     <ul className="collection">
       {data.songs.map((song) => (
         <li key={song.id} className="collection-item">
-          {song.title}
+          <Link to={`/songs/${song.id}`}>{song.title}</Link>
+
           <i
             className="material-icons"
-            onClick={(e) => onDelete(song.id, song.title)}
+            onClick={(e) => onDelete(e, song.id, song.title)}
           >
             delete
           </i>
         </li>
       ))}
-      <Link to="/song-create" className="collection-item">
+      <Link to="/songs/new" className="collection-item">
         Create a new song
       </Link>
     </ul>
