@@ -22,8 +22,18 @@ const createLyricMutation = gql`
       id
       lyrics {
         id
+        likes
         content
       }
+    }
+  }
+`;
+const likeMutation = gql`
+  mutation likeLyric($id: ID!) {
+    likeLyric(id: $id) {
+      id
+      content
+      likes
     }
   }
 `;
@@ -32,6 +42,7 @@ const SongDetail = () => {
   const { loading, error, data } = useQuery(fetchSong, { variables: { id } });
   const [newLyric, setNewLyric] = useState("");
   const [addLyricToSong, { addLyricData }] = useMutation(createLyricMutation);
+  const [likeLyric, { likeLyricData }] = useMutation(likeMutation);
   if (error) {
     return <h4>{error}</h4>;
   }
@@ -45,6 +56,13 @@ const SongDetail = () => {
         {data.song.lyrics.map((l) => (
           <li className="collection-item" key={l.id}>
             {l.content}
+
+            <span className="vote-box">
+              <i className="material-icons" onClick={(e) => onLike(e, l.id)}>
+                thumb_up
+              </i>
+              {l.likes}
+            </span>
           </li>
         ))}
       </ul>
@@ -59,6 +77,12 @@ const SongDetail = () => {
       });
       setNewLyric("");
     }
+  };
+  const onLike = async (e, id) => {
+    e.preventDefault();
+    await likeLyric({
+      variables: { id },
+    });
   };
   return (
     <div>
