@@ -20,6 +20,10 @@ const createLyricMutation = gql`
   mutation addLyricToSong($content: String!, $songId: ID!) {
     addLyricToSong(content: $content, songId: $songId) {
       id
+      lyrics {
+        id
+        content
+      }
     }
   }
 `;
@@ -51,7 +55,7 @@ const SongDetail = () => {
     if (newLyric.trim()) {
       await addLyricToSong({
         variables: { content: newLyric.trim(), songId: data.song.id },
-        refetchQueries: [{ query: fetchSong, variables: { id } }],
+        // refetchQueries: [{ query: fetchSong, variables: { id } }],
       });
       setNewLyric("");
     }
