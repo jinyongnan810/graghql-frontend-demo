@@ -58,7 +58,10 @@ const SongDetail = () => {
             {l.content}
 
             <span className="vote-box">
-              <i className="material-icons" onClick={(e) => onLike(e, l.id)}>
+              <i
+                className="material-icons"
+                onClick={(e) => onLike(e, l.id, l.likes)}
+              >
                 thumb_up
               </i>
               {l.likes}
@@ -78,10 +81,18 @@ const SongDetail = () => {
       setNewLyric("");
     }
   };
-  const onLike = async (e, id) => {
+  const onLike = async (e, id, likes) => {
     e.preventDefault();
     await likeLyric({
       variables: { id },
+      optimisticResponse: {
+        __typename: "Mutation",
+        likeLyric: {
+          id,
+          likes: likes + 1,
+          __typename: "LyricType",
+        },
+      },
     });
   };
   return (
